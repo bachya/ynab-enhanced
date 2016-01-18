@@ -21,6 +21,19 @@ function injectScript(path) {
   document.getElementsByTagName('body')[0].appendChild(script);
 }
 
+function injectJSString(js) {
+  var script = document.createElement('script');
+  script.text = js;
+
+  document.getElementsByTagName('body')[0].appendChild(script);
+}
+
+/* Load this to setup shared utility functions */
+injectScript('res/features/shared/main.js');
+
+/* Load this to setup behaviors when the DOM updates and shared functions */
+injectScript('res/features/act-on-change/main.js');
+
 function ensureDefaultsAreSet() {
   var storedKeys = kango.storage.getKeys();
 
@@ -35,13 +48,12 @@ function ensureDefaultsAreSet() {
   if (storedKeys.indexOf('removeZeroCategories') < 0) {
     kango.storage.setItem('removeZeroCategories', true);
   }
-
-  if (storedKeys.indexOf('transferJump') < 0) {
-    kango.storage.setItem('transferJump', true);
-  }
 }
 
 ensureDefaultsAreSet();
+
+// Global toolkit css.
+injectCSS('res/features/main.css');
 
 if (kango.storage.getItem('collapseExpandBudgetGroups')) {
   injectCSS('res/features/collapse-budget-groups/main.css');
@@ -67,6 +79,11 @@ if (kango.storage.getItem('highlightNegativesNegative')) {
 
 if (kango.storage.getItem('checkCreditBalances')) {
   injectScript('res/features/check-credit-balances/main.js');
+}
+
+if (kango.storage.getItem('checkCreditBalances') || kango.storage.getItem('highlightNegativesNegative')) {
+  // features that update presentation classes should have this enabled by default for consistency
+  injectScript('res/features/inspector-colours/main.js'); 
 }
 
 if (kango.storage.getItem('enableRetroCalculator')) {
@@ -118,8 +135,32 @@ if (kango.storage.getItem('transferJump')) {
   injectScript('res/features/transfer-jump/main.js');
 }
 
+if (kango.storage.getItem('pacing')) {
+  injectCSS('res/features/pacing/pacing.css');
+  injectScript('res/features/pacing/main.js');
+}
+
+if (kango.storage.getItem('goalIndicator')) {
+  injectScript('res/features/goal-indicator/main.js');
+  injectCSS('res/features/goal-indicator/main.css');
+}
+
 if (kango.storage.getItem('reconciledTextColor')) {
   injectScript('res/features/distinguish-reconciled-transactions/main.js');
+}
+
+if (kango.storage.getItem('swapClearedFlagged')) {
+  injectScript('res/features/swap-cleared-flagged/main.js');
+}
+
+if (kango.storage.getItem('budgetProgressBars') == 1) {
+  injectScript('res/features/budget-progress-bars/goals.js');
+}
+else if (kango.storage.getItem('budgetProgressBars') == 2) {
+  injectScript('res/features/budget-progress-bars/pacing.js');
+}
+else if (kango.storage.getItem('budgetProgressBars') == 3) {
+  injectScript('res/features/budget-progress-bars/both.js');
 }
 
 if (kango.storage.getItem('reconciledTextColor') == 1) {
@@ -147,4 +188,20 @@ if (kango.storage.getItem('editButtonPosition') == 1) {
 }
 else if (kango.storage.getItem('editButtonPosition') == 2) {
   injectCSS('res/features/edit-button-position/hidden.css');
+}
+
+if (kango.storage.getItem('daysOfBuffering')) {
+  daysOfBufferingHistoryLookup = kango.storage.getItem('daysOfBufferingHistoryLookup')
+  injectJSString('var daysOfBufferingHistoryLookup = ' + daysOfBufferingHistoryLookup + ';');
+  injectCSS('res/features/days-of-buffering/main.css');
+  injectScript('res/features/days-of-buffering/main.js');
+}
+
+if (kango.storage.getItem('removePositiveHighlight')) {
+  injectCSS('res/features/remove-positive-highlight/main.css');
+}
+
+if (kango.storage.getItem('importNotification')) {
+  injectCSS('res/features/import-notification/import-notification.css');
+  injectScript('res/features/import-notification/import-notification.js');
 }

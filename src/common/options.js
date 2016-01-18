@@ -12,32 +12,47 @@ function ensureDefaultsAreSet() {
   if (storedKeys.indexOf('removeZeroCategories') < 0) {
     kango.storage.setItem('removeZeroCategories', true);
   }
-
-  if (storedKeys.indexOf('transferJump') < 0) {
-    kango.storage.setItem('transferJump', true);
-  }
 }
 
 function saveCheckboxOption(elementId) {
-  var checked = document.getElementById(elementId).checked;
-  kango.storage.setItem(elementId, checked);
+  var element = document.getElementById(elementId);
+
+  if (element) {
+    kango.storage.setItem(elementId, element.checked);
+  } else {
+    console.log("WARNING: Tried to saveCheckboxOption but couldn't find element " + elementId + " on the page.");
+  }
 }
 
 function saveSelectOption(elementId) {
   var select = document.getElementById(elementId);
-  kango.storage.setItem(elementId, select.options[select.selectedIndex].value);
+
+  if (select) {
+    kango.storage.setItem(elementId, select.options[select.selectedIndex].value);
+  } else {
+    console.log("WARNING: Tried to saveSelectOption but couldn't find element " + elementId + " on the page.");
+  }
 }
 
 function restoreCheckboxOption(elementId) {
-  var checked = kango.storage.getItem(elementId);
-  document.getElementById(elementId).checked = checked;
+  var element = document.getElementById(elementId);
+
+  if (element) {
+    element.checked = kango.storage.getItem(elementId);
+  } else {
+    console.log("WARNING: Tried to restoreCheckboxOption but couldn't find element " + elementId + " on the page.");
+  }
 }
 
 function restoreSelectOption(elementId) {
   var data = kango.storage.getItem(elementId) || 0;
   var select = document.getElementById(elementId);
 
-  select.value = data;
+  if (select) {
+    select.value = data;
+  } else {
+    console.log("WARNING: Tried to restoreSelectOption but couldn't find element " + elementId + " on the page.");
+  }
 }
 
 function saveOptions() {
@@ -48,20 +63,28 @@ function saveOptions() {
   saveCheckboxOption('hideAOM');
   saveCheckboxOption('checkCreditBalances');
   saveCheckboxOption('highlightNegativesNegative');
+  saveCheckboxOption('removePositiveHighlight');
   saveCheckboxOption('enableRetroCalculator');
   saveCheckboxOption('removeZeroCategories');
   saveCheckboxOption('moveMoneyDialog');
+  saveCheckboxOption('pacing');
+  saveCheckboxOption('goalIndicator');
   saveCheckboxOption('moveMoneyAutocomplete');
+  saveCheckboxOption('daysOfBuffering');
   saveCheckboxOption('toggleSplits');
   saveCheckboxOption('accountsSelectedTotal');
   saveCheckboxOption('changeEnterBehavior');
   saveCheckboxOption('transferJump');
+  saveCheckboxOption('importNotification');
+  saveCheckboxOption('swapClearedFlagged');
 
+  saveSelectOption('daysOfBufferingHistoryLookup');
   saveSelectOption('budgetRowsHeight');
   saveSelectOption('reconciledTextColor');
   saveSelectOption('categoryActivityPopupWidth');
   saveSelectOption('accountsDisplayDensity');
   saveSelectOption('editButtonPosition');
+  saveSelectOption('budgetProgressBars');
 
   $('#settingsSaved').fadeIn()
                      .delay(1500)
@@ -80,20 +103,28 @@ function restoreOptions() {
   restoreCheckboxOption('hideAOM');
   restoreCheckboxOption('checkCreditBalances');
   restoreCheckboxOption('highlightNegativesNegative');
+  restoreCheckboxOption('removePositiveHighlight');
   restoreCheckboxOption('enableRetroCalculator');
   restoreCheckboxOption('removeZeroCategories');
   restoreCheckboxOption('moveMoneyDialog');
+  restoreCheckboxOption('pacing');
+  restoreCheckboxOption('goalIndicator');
   restoreCheckboxOption('moveMoneyAutocomplete');
+  restoreCheckboxOption('daysOfBuffering');
   restoreCheckboxOption('toggleSplits');
   restoreCheckboxOption('accountsSelectedTotal');
   restoreCheckboxOption('changeEnterBehavior');
   restoreCheckboxOption('transferJump');
+  restoreCheckboxOption('importNotification');
+  restoreCheckboxOption('swapClearedFlagged');
 
+  restoreSelectOption('daysOfBufferingHistoryLookup');
   restoreSelectOption('budgetRowsHeight');
   restoreSelectOption('reconciledTextColor');
   restoreSelectOption('categoryActivityPopupWidth');
   restoreSelectOption('accountsDisplayDensity');
   restoreSelectOption('editButtonPosition');
+  restoreSelectOption('budgetProgressBars');
 }
 
 function loadPanel(panel) {
@@ -110,19 +141,20 @@ function loadPanel(panel) {
 }
 
 KangoAPI.onReady(function() {
-  restoreOptions();
+  setTimeout(function() {
+    restoreOptions();
 
-  $('input:checkbox').bootstrapSwitch();
+    $('input:checkbox').bootstrapSwitch();
 
-  loadPanel('general');
+    loadPanel('general');
 
-  $('#generalMenuItem').click(function(e) { loadPanel('general'); e.preventDefault(); });
-  $('#accountsMenuItem').click(function(e) { loadPanel('accounts'); e.preventDefault(); });
-  $('#budgetMenuItem').click(function(e) { loadPanel('budget'); e.preventDefault(); });
+    $('#generalMenuItem').click(function(e) { loadPanel('general'); e.preventDefault(); });
+    $('#accountsMenuItem').click(function(e) { loadPanel('accounts'); e.preventDefault(); });
+    $('#budgetMenuItem').click(function(e) { loadPanel('budget'); e.preventDefault(); });
 
-  $('#save').click(saveOptions);
-  $('#cancel').click(function() {
-    KangoAPI.closeWindow();
-  });
-
+    $('#save').click(saveOptions);
+    $('#cancel').click(function() {
+      KangoAPI.closeWindow();
+    });
+  }, 100);
 });

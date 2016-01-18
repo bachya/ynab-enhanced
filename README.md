@@ -25,15 +25,16 @@ This is what the extension can do for you:
 - Show a total of the selected transactions in the account view.
 - Make the Move money dialog larger to make more of it fit on the screen at once.
 - Add a setting to make enter just save the transaction when adding transactions.
+- Show your your spending pacing mid-month to ensure you're on track to meet your budget.
 
 All of these are configurable with options in the extension options page.
 
 Roadmap
 -------
 
-Features under consideration and the general status of the project is on [our Trello Board](https://trello.com/b/EzOvXlil/ynab-enhanced-roadmap). Feel free to vote and comment. To suggest new features, please visit the YNAB Forum thread here and comment. Forum user @stephywephy is managing the features there and will make sure it ends up in Trello.
+Features under consideration and the general status of the project and roadmap is on [our Trello Board](https://trello.com/b/EzOvXlil/ynab-enhanced-roadmap). Feel free to vote and comment. To suggest new features, please visit the YNAB Forum thread here and comment. Forum user @stephywephy is managing the features there and will make sure it ends up in Trello.
 
-If you want to contribute, it's best if you can let us know so we don't double up on effort. You can see what is being worked on and by whom on the roadmap. Contact @blarg on the forums to get started.
+Contributions are greatly welcomed. If you want to contribute, it's best if you can let us know so we don't double up on effort. You can see what is being worked on and by whom on the roadmap. If you can't find what you want to build on the roadmap, feel free to put a note up on the github issues board to let the team know you're working on something new. When your code is ready, submit a pull request. You can also contact @blarg on the forums.
 
 Building the Code
 -----------------
@@ -51,7 +52,7 @@ This extension uses Kango Extensions to provide cross browser support. To build:
 
 1. Clone the repository
 1. Install Python 2.7 (or newer, but I haven't tested that) in your path so it's accessible with just plain ```python``` if you don't have it already.
-1. Run ```build``` from within the folder you cloned above.
+1. Run ```build.bat``` from within the folder you cloned above.
 1. You'll see platform specific output in the ```output``` folder.
 1. Load it into Chrome as an unpacked extension, or load it into Firefox via the .xpi file.
 
