@@ -12,18 +12,18 @@ def die(message):
 
 
 def is_framework_file(path):
-    include_dirs = ('includes', 'kango', 'kango-ui')
     if os.path.isfile(path):
         dir_name = os.path.basename(os.path.dirname(path))
+        include_dirs = ('includes', 'kango', 'kango-ui')
         return dir_name in include_dirs
     return False
 
 
 def is_module(path, info):
-    for module in info.modules:
-        if path.replace(os.sep, '/').find(module + '.js') != -1:
-            return True
-    return False
+    return any(
+        path.replace(os.sep, '/').find(module + '.js') != -1
+        for module in info.modules
+    )
 
 
 class ExtensionInfo(object):

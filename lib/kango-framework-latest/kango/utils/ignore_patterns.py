@@ -10,8 +10,7 @@ DEFAULT_FILE_NAME = '.kangoignore'
 
 
 def _load_names(path):
-    names = []
-    names.extend(DEFAULT_IGNORE_NAMES)
+    names = list(DEFAULT_IGNORE_NAMES)
     try:
         for line in open(os.path.join(path, DEFAULT_FILE_NAME)):
             names.append(line.strip())
