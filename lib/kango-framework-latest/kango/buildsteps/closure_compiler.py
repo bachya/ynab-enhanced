@@ -48,10 +48,7 @@ class BuildStep(BuildStepBase):
 
     def _process_dir(self, dir, ignore):
         for root, dirs, files in os.walk(dir):
-            if ignore is not None:
-                ignored_files = ignore(dir, files)
-            else:
-                ignored_files = set()
+            ignored_files = ignore(dir, files) if ignore is not None else set()
             for name in files:
                 if name not in ignored_files:
                     path = os.path.join(root, name)

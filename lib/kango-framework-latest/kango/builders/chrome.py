@@ -81,8 +81,7 @@ class ExtensionBuilder(ExtensionBuilderBase):
 
     def _load_manifest(self, manifest_path):
         with open(manifest_path, 'r') as f:
-            manifest = json.load(f)
-            return manifest
+            return json.load(f)
 
     def _save_manifest(self, manifest, manifest_path):
         with open(manifest_path, 'w') as f:
@@ -186,22 +185,23 @@ class ExtensionBuilder(ExtensionBuilderBase):
         return outpath
 
     def _build_locales(self, manifest, out_path):
-        if len(self._info.locales) > 0:
-            special_keys = ('name', 'description')
-            locale_keys = ['__info_%s__' % key for key in special_keys]
-            chrome_keys = ['info_%s' % key for key in special_keys]
-            locales = self.get_locales(self._info.locales, out_path)
-            for name, locale in locales:
-                chrome_locale = {}
-                for key, locale_key, chrome_key in zip(special_keys, locale_keys, chrome_keys):
-                    if locale_key in locale:
-                        chrome_locale[chrome_key] = {'message': locale[locale_key]}
-                        manifest[key] = '__MSG_%s__' % chrome_key
-                locale_dir = os.path.join(out_path, '_locales', name)
-                os.makedirs(locale_dir)
-                with open(os.path.join(locale_dir, 'messages.json'), 'w') as f:
-                    json.dump(chrome_locale, f, skipkeys=True, indent=4)
-                manifest['default_locale'] = self._info.default_locale
+        if len(self._info.locales) <= 0:
+            return
+        special_keys = ('name', 'description')
+        locale_keys = ['__info_%s__' % key for key in special_keys]
+        chrome_keys = ['info_%s' % key for key in special_keys]
+        locales = self.get_locales(self._info.locales, out_path)
+        for name, locale in locales:
+            chrome_locale = {}
+            for key, locale_key, chrome_key in zip(special_keys, locale_keys, chrome_keys):
+                if locale_key in locale:
+                    chrome_locale[chrome_key] = {'message': locale[locale_key]}
+                    manifest[key] = '__MSG_%s__' % chrome_key
+            locale_dir = os.path.join(out_path, '_locales', name)
+            os.makedirs(locale_dir)
+            with open(os.path.join(locale_dir, 'messages.json'), 'w') as f:
+                json.dump(chrome_locale, f, skipkeys=True, indent=4)
+            manifest['default_locale'] = self._info.default_locale
 
     def _validate(self, info):
         if len(info.description) > 132:

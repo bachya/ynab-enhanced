@@ -12,11 +12,7 @@ def makedirs(path):
 
 def copy_dir_contents(src, dst, ignore=None):
     names = os.listdir(src)
-    if ignore is not None:
-        ignored_names = ignore(src, names)
-    else:
-        ignored_names = set()
-
+    ignored_names = ignore(src, names) if ignore is not None else set()
     makedirs(dst)
 
     for name in names:
@@ -36,11 +32,7 @@ def copy_dir_contents(src, dst, ignore=None):
 
 def move_dir_contents(src, dst, ignore=None):
     names = os.listdir(src)
-    if ignore is not None:
-        ignored_names = ignore(src, names)
-    else:
-        ignored_names = set()
-
+    ignored_names = ignore(src, names) if ignore is not None else set()
     makedirs(dst)
 
     for name in names:

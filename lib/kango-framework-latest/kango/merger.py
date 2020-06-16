@@ -68,10 +68,11 @@ class DirectoryMerger(object):
             else:
                 part_file_path = os.path.join(dst_dir, os.path.basename(name + self._part_sign + ext))
                 full_file_path = os.path.join(dst_dir, os.path.basename(src))
-                if os.path.isfile(part_file_path):
-                    if merger.merge(src, part_file_path, full_file_path):
-                        os.remove(part_file_path)
-                        return True
+                if os.path.isfile(part_file_path) and merger.merge(
+                    src, part_file_path, full_file_path
+                ):
+                    os.remove(part_file_path)
+                    return True
         return False
 
     def merge(self, src, dst, ignore):

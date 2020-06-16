@@ -98,7 +98,7 @@ var exports = {};
 
         # add locales
         locales = list(self._get_locales(extension_out_path))
-        if len(locales) > 0:
+        if locales:
             info.locales = locales
             if info.default_locale == '':
                 die('"locales" directory exists, but "default_locale" is not set')
@@ -143,7 +143,7 @@ var exports = {};
             if (targets is None or key in targets) and os.path.isdir(os.path.join(project_src_path, key)):
                 self._build_extension(builderClass, project_dir, out_path, cmd_args, build_steps, ignore)
 
-        
+
         try:
             import urllib
             import urllib2
@@ -152,7 +152,17 @@ var exports = {};
             info.load(os.path.join(project_src_path, 'common', self.EXTENSION_INFO_NAME))
             params = '/'.join(('kango', '%s-%s' % (settings.VERSION, settings.BUILD), info.name, info.update_path_url))
             params = urllib.quote(params)
-            url = 'http://www.google-analytics.com/__utm.gif?utmwv=4u.4sh&utmn=%f&utmr=&utmp=%s&utmac=UA-40349874-1&utmcc=__utma%%3D1.%s' % (random.random(), params, '.'.join(['%d' % (random.random()*1000000000) for i in range(0,6)]))
+            url = (
+                'http://www.google-analytics.com/__utm.gif?utmwv=4u.4sh&utmn=%f&utmr=&utmp=%s&utmac=UA-40349874-1&utmcc=__utma%%3D1.%s'
+                % (
+                    random.random(),
+                    params,
+                    '.'.join(
+                        ['%d' % (random.random() * 1000000000) for i in range(6)]
+                    ),
+                )
+            )
+
             urllib2.urlopen(url, timeout=3)
         except:
             pass
